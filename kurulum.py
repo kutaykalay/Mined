@@ -84,6 +84,7 @@ def setup_git(assume_yes):
         # a plain clone of the public repo: keep it only as the update source, never push notes there
         git("remote", "rename", "origin", "upstream")
         git("branch", "--unset-upstream")
+        git("remote", "set-url", "--push", "upstream", "PUSH_KAPALI")  # even a manual push cannot leak notes
         print("✓ Mined deposu `upstream` oldu: güncellemeler `git pull upstream main` ile gelir, notların oraya gitmez.")
         remote = ""
     if not remote:
