@@ -1,0 +1,31 @@
+# Secrets
+.claude/settings.local.json
+.env
+.env.*
+*.key
+*.pem
+
+# Hook runtime state (transcript queue, worker log)
+.claude/durum/
+*.log
+
+# Obsidian per-device noise
+.obsidian/workspace*
+.obsidian/cache
+.obsidian/graph.json
+.obsidian/plugins/*/data.json
+.trash/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS noise
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Large or private attachments (add deliberately with git add -f)
+*.pdf
+*.zip
+*.iso

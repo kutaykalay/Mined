@@ -1,0 +1,10 @@
+{
+  "newFileLocation": "folder",
+  "newFileFolderPath": "00-Gelen",
+  "attachmentFolderPath": "00-Gelen/ekler",
+  "useMarkdownLinks": false,
+  "newLinkFormat": "shortest",
+  "alwaysUpdateLinks": true,
+  "showUnsupportedFiles": false,
+  "userIgnoreFilters": [".claude/"]
+}

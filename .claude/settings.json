@@ -1,0 +1,13 @@
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [ { "type": "command", "command": "py -3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/beyin.py\" oturum-basi", "timeout": 15 } ] }
+    ],
+    "PreCompact": [
+      { "hooks": [ { "type": "command", "command": "py -3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/beyin.py\" sikistirma", "timeout": 15 } ] }
+    ],
+    "SessionEnd": [
+      { "hooks": [ { "type": "command", "command": "py -3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/beyin.py\" oturum-sonu", "timeout": 15 } ] }
+    ]
+  }
+}
