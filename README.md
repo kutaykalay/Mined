@@ -1,4 +1,8 @@
-# İkinci Beyin
+<p align="center">
+  <img src="assets/banner.svg" alt="KutayBrain: Claude Code ile çalışan Türkçe ikinci beyin" width="100%">
+</p>
+
+# KutayBrain
 
 [Claude Code](https://claude.com/claude-code) ile çalışan, Türkçe, kendi kendini yöneten bir ikinci beyin. Aynı klasör bir [Obsidian](https://obsidian.md) vault'u.
 
