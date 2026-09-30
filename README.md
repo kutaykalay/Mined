@@ -1,8 +1,10 @@
 <p align="center">
-  <img src="assets/banner.svg" alt="KutayBrain: Claude Code ile çalışan Türkçe ikinci beyin" width="100%">
+  <img src="assets/banner.svg" alt="Mined: sohbetlerini kalıcı bilgiye işleyen Türkçe ikinci beyin" width="100%">
 </p>
 
-# KutayBrain
+# Mined
+
+> *Mind, mined.* Sohbetlerin ham cevher; Mined onları kazıp kalıcı bilgiye işler.
 
 [Claude Code](https://claude.com/claude-code) ile çalışan, Türkçe, kendi kendini yöneten bir ikinci beyin. Aynı klasör bir [Obsidian](https://obsidian.md) vault'u.
 
