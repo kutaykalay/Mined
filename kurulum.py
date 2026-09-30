@@ -5,6 +5,7 @@ Yaptıkları:
   2. Hook komutlarını işletim sistemine göre ayarlar (Windows: `py -3`, diğerleri: `python3`).
   3. Hafıza dosyalarındaki {{KULLANICI}} ve {{TARIH}} yer tutucularını doldurur.
   4. Git yedeğini ayarlar: otomatik commit her zaman açık, GitHub'a otomatik push isteğe bağlı.
+     Mined'dan klonlandıysa onu `upstream` yapar; güncellemeler oradan çekilir, notlar oraya gitmez.
   5. İsteğe bağlı: bütün projelerde çalışan global hook'ları ve "ikinci beyin köprüsü"nü
      ~/.claude/settings.json ve ~/.claude/CLAUDE.md'ye ekler (önce yedek alır).
 
@@ -21,6 +22,7 @@ from pathlib import Path
 
 VAULT = Path(__file__).resolve().parent
 SETTINGS = VAULT / ".claude" / "ayarlar.json"
+UPSTREAM = "https://github.com/kutaykalay/Mined.git"
 PLACEHOLDER_FILES = ["CLAUDE.md", "80-Hafiza/Kurallar.md", "80-Hafiza/Cekirdek.md",
                      "80-Hafiza/Konular.md", "20-Bilgi/log.md"]
 HOME_CLAUDE = Path.home() / ".claude"
@@ -63,6 +65,12 @@ def git(*args):
     return subprocess.run(["git", *args], cwd=VAULT, capture_output=True, text=True)
 
 
+def same_repo(a, b):
+    def norm(url):
+        return url.strip().lower().removesuffix("/").removesuffix(".git").split("github.com")[-1].strip(":/")
+    return norm(a) == norm(b)
+
+
 def setup_git(assume_yes):
     if not shutil.which("git"):
         print("! git bulunamadı: otomatik yedek kapalı kalır. Kurduktan sonra `git init` yeterli.")
@@ -70,12 +78,20 @@ def setup_git(assume_yes):
     if not (VAULT / ".git").exists():
         git("init", "-q")
         print("✓ git deposu oluşturuldu (yerel yedek: her oturum başında ve her derlemede commit).")
+        print("  Not: zip'ten kurulduğu için `git pull upstream main` ile güncelleme alınamaz; klonlamak daha iyi.")
     remote = git("remote", "get-url", "origin").stdout.strip()
+    if remote and same_repo(remote, UPSTREAM):
+        # a plain clone of the public repo: keep it only as the update source, never push notes there
+        git("remote", "rename", "origin", "upstream")
+        git("branch", "--unset-upstream")
+        print("✓ Mined deposu `upstream` oldu: güncellemeler `git pull upstream main` ile gelir, notların oraya gitmez.")
+        remote = ""
     if not remote:
-        print("  GitHub'a da yedeklemek istersen PRIVATE bir repo aç ve `git remote add origin <url>` yap.")
-        return True  # push() skips on its own while there is no upstream
+        print("  GitHub'a da yedeklemek istersen boş bir PRIVATE repo aç, sonra:\n"
+              "    git remote add origin <url>\n    git push -u origin main")
+        return True  # push() skips on its own while the branch tracks no remote
     print(f"\n  Bu klasörün git remote'u: {remote}")
-    print("  Notların kişiseldir. Bu repo PRIVATE değilse ya da şablonun kendi reposuysa push'u AÇMA.")
+    print("  Notların kişiseldir. Bu repo PRIVATE değilse push'u AÇMA.")
     return ask("  Notlar her oturumda bu remote'a otomatik push'lansın mı?", False, assume_yes)
 
 

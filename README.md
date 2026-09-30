@@ -16,19 +16,38 @@ Bu klasörde `claude` yazıp sohbet edersin. **Not tutmayı, düzenlemeyi ve hat
 
 **Gereksinimler:** [Claude Code](https://claude.com/claude-code) (giriş yapılmış), Python 3.9+, git. Obsidian isteğe bağlı (sadece notları okumak için).
 
-1. GitHub'da **Use this template → Create a new repository** ile kendi kopyanı oluştur ve **Private** seç. Notların kişisel; public repoya yedeklenmemeli. Ya da sadece indir.
-2. Klonla ve kurulumu çalıştır:
+1. Klonla ve kurulumu çalıştır:
 
    ```sh
-   git clone <senin-private-repon> ikinci-beyin
-   cd ikinci-beyin
+   git clone https://github.com/kutaykalay/Mined.git mined
+   cd mined
    python kurulum.py        # Windows: py -3 kurulum.py
    ```
 
-   Kurulum adını sorar, hook komutlarını işletim sistemine göre ayarlar, git yedeğini kurar ve isteğe bağlı olarak başka proje klasörlerinde de beyni kullanmanı sağlayan global hook'ları ekler. Tekrar çalıştırmak güvenlidir.
+   Kurulum adını sorar, hook komutlarını işletim sistemine göre ayarlar ve git'i hazırlar: Mined deposu `upstream` olur (güncellemeler oradan gelir, notların oraya asla gitmez). İsteğe bağlı olarak başka proje klasörlerinde de beyni kullanmanı sağlayan global hook'ları ekler. Tekrar çalıştırmak güvenlidir.
+2. Notlarını GitHub'a yedeklemek istersen boş bir **private** repo aç ve bağla. Notların kişisel; public repoya yedeklenmemeli.
+
+   ```sh
+   git remote add origin https://github.com/<kullanıcı-adın>/<private-repon>.git
+   git push -u origin main
+   ```
+
+   Bundan sonra vault her oturum açılışında ve her derlemede bu repoya otomatik yedeklenir.
 3. `claude` yaz, konuşmaya başla. İlk oturumda kendini biraz anlat; Claude bunu `80-Hafiza/Cekirdek.md`'ye yazar.
 
 > Kurulum yapılmadan hook'lar hiçbir şey yapmaz, not yazmaz, commit atmaz. Claude sadece kurulumu hatırlatır.
+
+---
+
+## Güncelleme
+
+Mined geliştikçe yeni sürümü tek komutla alırsın:
+
+```sh
+git pull upstream main
+```
+
+Güncellemeler motora dokunur (hook'lar, skill'ler, `CLAUDE.md`, README). Notların (`10-Projeler`, `20-Bilgi`, `50-Gunler`, `80-Hafiza`…) senin commit'lerindir; aynı satırları ikiniz birden değiştirmediyseniz git bunları kendiliğinden birleştirir. Nadiren bir çakışma çıkarsa Claude'a "güncelleme çakışmasını çöz" demen yeterli.
 
 ---
 
