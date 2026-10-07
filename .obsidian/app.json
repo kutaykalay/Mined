@@ -6,5 +6,7 @@
   "newLinkFormat": "shortest",
   "alwaysUpdateLinks": true,
   "showUnsupportedFiles": false,
-  "userIgnoreFilters": [".claude/"]
+  "userIgnoreFilters": [
+    ".claude/"
+  ]
 }

@@ -55,6 +55,9 @@ CONFIG = load_settings()
 USER = CONFIG.get("kullanici") or "Kullanıcı"
 AUTO_PUSH = CONFIG.get("otomatik_push", True)  # kurulum.py asks; off keeps backups local-only
 USER_LABEL = USER.replace("i", "İ").upper()  # speaker label in transcripts sent to the models
+# Which computer a session ran on, so two machines' logs never blur: ayarlar.json "cihazlar" maps
+# a Windows computer name to a readable label; an unmapped computer shows its own name.
+DEVICE = (lambda name: CONFIG.get("cihazlar", {}).get(name, name))(os.environ.get("COMPUTERNAME", ""))
 
 
 def personal(prompt):
@@ -340,7 +343,7 @@ def append_daily(day, entries):
                         encoding="utf-8")
     blocks, names = [], page_names()
     for e in entries:
-        heading = " · ".join(p for p in (e.get("saat"), e.get("baslik") or "Oturum") if p)
+        heading = " · ".join(p for p in (e.get("saat"), DEVICE, e.get("baslik") or "Oturum") if p)
         lines = [f"\n## {heading}"]
         lines += [f"- {m}" for m in e.get("maddeler", [])]
         links = [l for l in e.get("baglantilar", []) if l]
@@ -372,7 +375,8 @@ def rewrite_last_session(title, body, when, session, wrote_before):
         gist = old_card[0].removeprefix("## Oturum:").strip()
         first = next((l.strip() for l in old_card[1:] if l.strip() and not CARD_MARK.search(l)), "")
         previous.insert(0, f"- {gist}: {first}"[:220])
-    card = [f"## Oturum: {when:%Y-%m-%d %H:%M} · {title}", f"<!-- oturum: {session} -->", body.strip(), ""]
+    where = f" · {DEVICE}" if DEVICE else ""
+    card = [f"## Oturum: {when:%Y-%m-%d %H:%M}{where} · {title}", f"<!-- oturum: {session} -->", body.strip(), ""]
     path.write_text("\n".join(header + card + ["## Önceki Oturumlar"] + previous[:10]) + "\n", encoding="utf-8")
 
 
@@ -380,6 +384,10 @@ def summarize(session, transcript, reason):
     SESSIONS.mkdir(parents=True, exist_ok=True)
     state_file = SESSIONS / f"{session}.json"
     state = json.loads(state_file.read_text(encoding="utf-8")) if state_file.exists() else {}
+    # Claude Code writes no transcript for a session that only ran /exit.
+    if not transcript or not Path(transcript).exists():
+        log(f"ozetle {session[:8]} ({reason}): transkript yok, boş oturum")
+        return
     turns, prompts, first_time, total = read_new_turns(transcript, state.get("satir", 0))
     if prompts == 0:
         log(f"ozetle {session[:8]} ({reason}): yeni mesaj yok")
@@ -551,11 +559,25 @@ def git_snapshot(message):
         log(f"git commit başarısız: {result.stderr.strip()[:200]}")
 
 
+def pull():
+    """Bring in what the user's other computer pushed. On a conflict, abort and raise: a half-done
+    rebase must never be left in the vault."""
+    git = shutil.which("git")
+    if not (AUTO_COMMIT and AUTO_PUSH and git and (VAULT / ".git").exists()):
+        return
+    run = lambda *a: subprocess.run([git, *a], cwd=VAULT, capture_output=True, text=True, creationflags=NO_WINDOW)
+    result = run("pull", "--rebase", "--autostash", "-q")
+    if result.returncode != 0:
+        run("rebase", "--abort")
+        raise RuntimeError(f"git pull başarısız (diğer bilgisayarla çakışma olabilir): {result.stderr.strip()[:200]}")
+
+
 def push():
     git = shutil.which("git")
     if not (AUTO_COMMIT and AUTO_PUSH and git and (VAULT / ".git").exists()):
         return
     run = lambda *a: subprocess.run([git, *a], cwd=VAULT, capture_output=True, text=True, creationflags=NO_WINDOW)
+    pull()  # so this push never gets rejected as behind
     ahead = run("rev-list", "--count", "@{u}..HEAD").stdout.strip()
     if ahead in ("", "0"):
         return
@@ -613,6 +635,9 @@ def compile_queue():
     QUEUE.replace(batch)
     try:
         git_snapshot(f"beyin: vault yedeği (derleme öncesi) {dt.datetime.now():%Y-%m-%d %H:%M}")
+        # compile on top of the other computer's pages, or both rewrite index/Konular from the same
+        # base and the next push conflicts (2026-10-06)
+        pull()
         source = batch.read_text(encoding="utf-8")
         claims = parse_json(run_claude(personal(EXTRACT_PROMPT) + source, SONNET_MODEL, str(STATE), [], 300))
         kept, rejected = verify_claims(claims.get("iddialar") or [], source)
@@ -666,6 +691,9 @@ def main():
                 summarize(args.oturum, args.transkript, args.neden)
                 if should_compile():
                     compile_queue()
+                else:  # push the summary now so the other computer sees it on its next session start
+                    git_snapshot(f"beyin: vault yedeği (oturum sonu) {dt.datetime.now():%Y-%m-%d %H:%M}")
+                    push()
             elif args.zorla or should_compile():
                 compile_queue()
     except LockTimeout:

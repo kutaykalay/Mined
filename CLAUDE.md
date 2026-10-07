@@ -54,6 +54,13 @@ Your live duties in this chat (you, the main model) are only these:
    `.claude/durum/arka_plan.log`.
 5. **Worker warnings.** If the session-start context shows a background failure, tell the user in
    one line, and offer to check `.claude/durum/arka_plan.log`.
+6. **Articles.** Web Clipper saves articles to `00-Gelen/` with `tur: makale` and
+   `durum: islenmedi`. When the user says "makaleyi işle" / "makaleleri işle" (or names one), for
+   each: read it fully, add its durable points to the matching `20-Bilgi/` or `30-Kaynaklar/` page
+   (create one only for a genuinely new topic), keep the article's claims factual and attributed,
+   note contradictions with existing pages explicitly, and cite it as a source link. Never edit the
+   article body; set `durum: islendi`, move it to `90-Arsiv/Makaleler/`, then update `index.md`
+   and add one line to `20-Bilgi/log.md` (`· makale ·`). Confirm in one line per article.
 
 If you are running as the background compiler, your prompt overrides this section.
 

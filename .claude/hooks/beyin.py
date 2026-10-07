@@ -3,7 +3,8 @@
 oturum-basi (SessionStart): injects rules, last-session card, active threads,
     knowledge index and the tail of today's/yesterday's daily note, each capped,
     plus any warnings left by the background worker.
-    It also starts arka_plan.py yedek in the background (commit + push the vault).
+    It first fast-forwards the vault to what another computer pushed, then starts
+    arka_plan.py yedek in the background (commit, pull --rebase, push).
 oturum-sonu (SessionEnd) / sikistirma (PreCompact): launch arka_plan.py detached,
     so Haiku summarizes the session (and Sonnet compiles when due) after Claude exits.
 """
@@ -19,6 +20,7 @@ MEMORY = VAULT / "80-Hafiza"
 STATE = VAULT / ".claude" / "durum"
 REMINDER = STATE / "hatirlatma.txt"
 QUEUE = STATE / "derlenecek.md"
+LOCK = STATE / "kilit"
 WORKER = Path(__file__).resolve().parent / "arka_plan.py"
 SETTINGS = VAULT / ".claude" / "ayarlar.json"
 
@@ -92,9 +94,32 @@ def size_warnings():
     return out
 
 
+def quick_pull():
+    """Fast-forward to what the other computer pushed before reading memory. Never merges or
+    rebases here: on divergence, offline or a busy worker it skips, and the worker syncs later.
+    Returns a warning when memory may be stale, so the skip is never silent."""
+    if LOCK.exists() or not (VAULT / ".git").exists():
+        return None
+    git = lambda *a, t=8: subprocess.run(["git", *a], cwd=VAULT, capture_output=True, text=True, timeout=t,
+                                        env={**os.environ, "GIT_TERMINAL_PROMPT": "0"},
+                                        creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+    try:
+        result = git("pull", "--ff-only", "-q")
+        if result.returncode == 0:
+            return None
+        counts = git("rev-list", "--left-right", "--count", "HEAD...@{u}", t=3).stdout.split()
+    except (OSError, subprocess.TimeoutExpired):
+        return "Vault diğer bilgisayardan çekilemedi (zaman aşımı); hafıza eski olabilir."
+    if len(counts) == 2 and counts[0] != "0" and counts[1] != "0":
+        return (f"Vault diğer bilgisayarla ayrıştı ({counts[0]} yerel, {counts[1]} uzak commit); hafıza eski. "
+                "İki taraf birleştirilmeden senkron çalışmaz, kullanıcıya hemen söyle.")
+    return "Vault diğer bilgisayardan çekilemedi (ağ?); hafıza eski olabilir."
+
+
 def session_start(payload):
+    sync_warning = quick_pull()
     sections = []
-    warnings = []
+    warnings = [sync_warning] if sync_warning else []
     if REMINDER.exists():
         warnings += [l for l in REMINDER.read_text(encoding="utf-8").splitlines() if l.strip()][-5:]
         REMINDER.unlink(missing_ok=True)

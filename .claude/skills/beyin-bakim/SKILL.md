@@ -27,6 +27,8 @@ Check each item, gathering facts with Glob/Grep/Read:
 7. **Contradictions:** statements in `20-Bilgi/` that conflict with a newer daily log or page.
 8. **Secrets:** anything that looks like a password, API key, token or card number (report the
    file and line only, never print the value).
+9. **Missing pages:** people, tools, projects or concepts mentioned as plain text in 3+ notes
+   (including `50-Gunler/`) that have no page or alias and are never `[[linked]]`.
 
 ## 2. Report
 
@@ -39,7 +41,10 @@ the proposed fixes as a numbered list. Ask once for approval, unless the user al
   `90-Arsiv/`, and repoint links.
 - Broken links: fix the spelling, or create a stub page only if the topic is clearly worth one.
 - Orphans: link them from the closest related page.
-- Inbox: file each note into the right folder, or move it to `90-Arsiv/`.
+- Inbox: file each note into the right folder, or move it to `90-Arsiv/`. Articles
+  (`tur: makale`) go through the CLAUDE.md article procedure instead.
+- Missing pages: link the mentions to an existing page or alias; propose a new page only for
+  topics worth one, and ask before creating it.
 - Oversized memory files: move old sections **verbatim** to `80-Hafiza/Arsiv/<dosya>-YYYY-MM.md`
   and leave the recent part in place. Move stale Aktif threads to Kapanan with a one-line reason.
 - Secrets: ask the user before redacting.

@@ -204,8 +204,12 @@ def insurance(session, transcript, root, reason):
     PROJECT_STATE.mkdir(parents=True, exist_ok=True)
     state_file = PROJECT_STATE / f"{session}.json"
     state = json.loads(state_file.read_text(encoding="utf-8")) if state_file.exists() else {}
-    turns, total = read_turns(transcript, state.get("satir", 0))
     tag = f"sigorta {root.name}/{session[:8]} ({reason})"
+    # Claude Code writes no transcript for a session closed without a prompt.
+    if not Path(transcript).exists():
+        ap.log(f"{tag}: transkript yok, boş oturum")
+        return
+    turns, total = read_turns(transcript, state.get("satir", 0))
 
     saved = [p for p in session_files(root) if "otomatik-session" not in p.name]
     if saved:  # work before the last real save is already covered
