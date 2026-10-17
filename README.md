@@ -4,9 +4,9 @@
 
 # Mined
 
-[Claude Code](https://claude.com/claude-code) için Türkçe bir ikinci beyin. Klasör aynı zamanda bir [Obsidian](https://obsidian.md) vault'u.
+Ajan tabanlı yapay zekâ ekosistemi için hafıza sistemi. [Claude Code](https://claude.com/claude-code) ile çalışır, Türkçedir. Klasör aynı zamanda bir [Obsidian](https://obsidian.md) vault'u.
 
-> **In English:** Mined is a Turkish second brain for [Claude Code](https://claude.com/claude-code). You chat; hooks summarize each session, a background compiler turns the summaries into wiki pages with verified citations, and the next session continues where you left off. Plain Markdown, no database, no server.
+> **In English:** Mined is a memory system for the agentic AI ecosystem, built on [Claude Code](https://claude.com/claude-code) for Turkish speakers. You chat; hooks summarize each session, a background compiler turns the summaries into wiki pages with verified citations, and the next session continues where you left off. Plain Markdown, no database, no server.
 
 Bu klasörde `claude` yazıp sohbet edersin. Not tutmayı sistem yapar: oturum sonunda konuşma özetlenir, birkaç oturumda bir bilgi sayfalarına işlenir, sonraki oturumda Claude kaldığın yeri bilir. Her şey düz Markdown. Kendi Claude aboneliğini kullanır, ek ücret yok.
 
