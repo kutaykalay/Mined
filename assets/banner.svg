@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-label="Mined: Ajan tabanlı yapay zekâ ekosistemi için hafıza sistemi.">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-label="Mined: A memory system for the agentic AI ecosystem.">
 <defs>
 <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0a0e1c"/><stop offset=".6" stop-color="#121833"/><stop offset="1" stop-color="#1d1238"/></linearGradient>
 <radialGradient id="glow" cx=".79" cy=".4" r=".38"><stop offset="0" stop-color="#7c3aed" stop-opacity=".45"/><stop offset="1" stop-color="#7c3aed" stop-opacity="0"/></radialGradient>
@@ -177,7 +177,6 @@
 <polygon points="1180,367 1190.4,377.4 1186.5,390.4 1173.5,390.4 1169.6,377.4" fill="#a78bfa" fill-opacity=".85" stroke="#ffffff" stroke-opacity=".4"/>
 <polygon points="880,390 886.4,396.4 884.0,404.4 876.0,404.4 873.6,396.4" fill="#c4b5fd" fill-opacity=".85" stroke="#ffffff" stroke-opacity=".4"/>
 <text x="74" y="214" font-family="'Segoe UI', Inter, 'Helvetica Neue', Arial, sans-serif" font-size="100" font-weight="800" letter-spacing="-3" fill="url(#title)">Mined</text>
-<text x="398" y="212" font-family="'Segoe UI', Inter, 'Helvetica Neue', Arial, sans-serif" font-size="22" font-style="italic" fill="#94a3b8">/maɪnd/</text>
-<text x="80" y="268" font-family="'Segoe UI', Inter, 'Helvetica Neue', Arial, sans-serif" font-size="25" fill="#e2e8f0">Ajan tabanlı yapay zekâ ekosistemi için hafıza sistemi.</text>
+<text x="80" y="268" font-family="'Segoe UI', Inter, 'Helvetica Neue', Arial, sans-serif" font-size="25" fill="#e2e8f0">A memory system for the agentic AI ecosystem.</text>
 </g>
 </svg>

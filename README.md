@@ -1,22 +1,20 @@
 <p align="center">
-  <img src="assets/banner.svg" alt="Mined: Ajan tabanlı yapay zekâ ekosistemi için hafıza sistemi." width="100%">
+  <img src="assets/banner.svg" alt="Mined: A memory system for the agentic AI ecosystem." width="100%">
 </p>
 
 # Mined
 
-> *Mind, mined.* Sohbetlerin ham cevher; Mined onları kazıp kalıcı bilgiye işler.
+[Claude Code](https://claude.com/claude-code) için Türkçe bir ikinci beyin. Klasör aynı zamanda bir [Obsidian](https://obsidian.md) vault'u.
 
-[Claude Code](https://claude.com/claude-code) ile çalışan, Türkçe, kendi kendini yöneten bir ikinci beyin. Aynı klasör bir [Obsidian](https://obsidian.md) vault'u.
+> **In English:** Mined is a Turkish second brain for [Claude Code](https://claude.com/claude-code). You chat; hooks summarize each session, a background compiler turns the summaries into wiki pages with verified citations, and the next session continues where you left off. Plain Markdown, no database, no server.
 
-> **In English:** Mined is a self-maintaining second brain for [Claude Code](https://claude.com/claude-code), built for Turkish speakers. You just chat; hooks summarize each session, a background compiler turns those summaries into durable wiki pages with verified citations, and the next session picks up where you left off. Everything is plain Markdown in an Obsidian vault: no database, no server, no extra cost.
-
-Bu klasörde `claude` yazıp sohbet edersin. **Not tutmayı, düzenlemeyi ve hatırlamayı sistem yapar**: oturum bitince konuşman özetlenir, birkaç oturumda bir kalıcı bilgi sayfalarına işlenir, sonraki oturumda Claude kaldığın yeri bilir. Her şey düz Markdown dosyasıdır; veritabanı, sunucu, ek ücret yoktur. Kendi Claude aboneliğini kullanır.
+Bu klasörde `claude` yazıp sohbet edersin. Not tutmayı sistem yapar: oturum sonunda konuşma özetlenir, birkaç oturumda bir bilgi sayfalarına işlenir, sonraki oturumda Claude kaldığın yeri bilir. Her şey düz Markdown. Kendi Claude aboneliğini kullanır, ek ücret yok.
 
 ---
 
 ## Kurulum
 
-**Gereksinimler:** [Claude Code](https://claude.com/claude-code) (giriş yapılmış), Python 3.9+, git. Obsidian isteğe bağlı (sadece notları okumak için).
+**Gereksinimler:** [Claude Code](https://claude.com/claude-code) (giriş yapılmış), Python 3.9+, git. Obsidian isteğe bağlı.
 
 1. Klonla ve kurulumu çalıştır:
 
@@ -26,30 +24,28 @@ Bu klasörde `claude` yazıp sohbet edersin. **Not tutmayı, düzenlemeyi ve hat
    python kurulum.py        # Windows: py -3 kurulum.py
    ```
 
-   Kurulum adını sorar, hook komutlarını işletim sistemine göre ayarlar ve git'i hazırlar: Mined deposu `upstream` olur (güncellemeler oradan gelir, notların oraya asla gitmez). İsteğe bağlı olarak başka proje klasörlerinde de beyni kullanmanı sağlayan global hook'ları ekler. Tekrar çalıştırmak güvenlidir.
-2. Notlarını GitHub'a yedeklemek istersen boş bir **private** repo aç ve bağla. Notların kişisel; public repoya yedeklenmemeli.
+   Kurulum adını sorar, hook'ları ayarlar ve Mined'ı `upstream` remote'u yapar. Güncellemeler oradan gelir, notların oraya gitmez. İstersen başka projeler için global hook'ları da ekler. Tekrar çalıştırmak güvenli.
+2. Yedek istersen boş bir **private** repo aç ve bağla:
 
    ```sh
    git remote add origin https://github.com/<kullanıcı-adın>/<private-repon>.git
    git push -u origin main
    ```
 
-   Bundan sonra vault her oturum açılışında ve her derlemede bu repoya otomatik yedeklenir.
-3. `claude` yaz, konuşmaya başla. İlk oturumda kendini biraz anlat; Claude bunu `80-Hafiza/Cekirdek.md`'ye yazar.
+   Vault her oturum açılışında ve her derlemede bu repoya yedeklenir.
+3. `claude` yaz ve konuş. İlk oturumda kendini biraz anlat; Claude bunu `80-Hafiza/Cekirdek.md`'ye yazar.
 
-> Kurulum yapılmadan hook'lar hiçbir şey yapmaz, not yazmaz, commit atmaz. Claude sadece kurulumu hatırlatır.
+> Kurulum yapılmadan hook'lar hiçbir şey yapmaz.
 
 ---
 
 ## Güncelleme
 
-Mined geliştikçe yeni sürümü tek komutla alırsın:
-
 ```sh
 git pull upstream main
 ```
 
-Güncellemeler motora dokunur (hook'lar, skill'ler, `CLAUDE.md`, README). Notların (`10-Projeler`, `20-Bilgi`, `50-Gunler`, `80-Hafiza`…) senin commit'lerindir; aynı satırları ikiniz birden değiştirmediyseniz git bunları kendiliğinden birleştirir. Nadiren bir çakışma çıkarsa Claude'a "güncelleme çakışmasını çöz" demen yeterli.
+Güncellemeler yalnızca motoru değiştirir (hook'lar, skill'ler, `CLAUDE.md`, README). Notların ayrı kalır. Çakışma çıkarsa Claude'a "güncelleme çakışmasını çöz" de.
 
 ---
 
@@ -92,23 +88,23 @@ flowchart LR
     SN -->|maskeleme + commit| GIT[(git<br/>isteğe bağlı private remote)]
 ```
 
-Kısaca: **oturum başında** hafıza okunur, **oturum sonunda** Haiku özet yazar, **birkaç oturumda bir** Sonnet özetleri kalıcı bilgi sayfalarına işler. Vault her oturum açılışında ve her derlemede git'e commit'lenir.
+Oturum başında hafıza okunur. Oturum sonunda Haiku özet yazar. Birkaç oturumda bir Sonnet özetleri bilgi sayfalarına işler.
 
 ---
 
 ## Kim neyi yazar
 
-| Kim | Ne zaman | Yazdığı yerler |
+| Kim | Ne zaman | Nereye |
 | --- | --- | --- |
-| **Ana model** (sohbetteki Claude) | Açıkça isteyince ("not al", "kaydet") veya davranışını düzeltince | İlgili sayfa veya `00-Gelen/`; düzeltmeler anında `Kurallar.md`'ye |
-| **Haiku** (`ozetle`) | Her oturum sonunda ve bağlam sıkıştırmadan önce | `50-Gunler/YYYY-MM-DD.md`, `80-Hafiza/Son-Oturum.md` kartı |
-| **Sonnet** (`derle`) | Kuyrukta 3 giriş birikince veya 20 saatte bir | `20-Bilgi/`, `30-Kaynaklar/`, `10-Projeler/`, `index.md`, `log.md`, `Konular.md`, `Cekirdek.md`, `Kurallar.md` |
-| **Yedek** (`yedek`) | Her oturum açılışında, arka planda | Not yazmaz; değişiklikleri maskeler, commit'ler, (açıksa) push'lar |
-| **Sen** | İstediğinde | Her yere; elle yazdığın metin hiçbir model tarafından silinmez |
+| **Ana model** | "not al" deyince veya davranışını düzeltince | İlgili sayfa, `00-Gelen/`, `Kurallar.md` |
+| **Haiku** (`ozetle`) | Her oturum sonunda | `50-Gunler/`, `80-Hafiza/Son-Oturum.md` |
+| **Sonnet** (`derle`) | 3 giriş birikince veya 20 saatte bir | `20-Bilgi/`, `30-Kaynaklar/`, `10-Projeler/`, `80-Hafiza/`, index ve log |
+| **Yedek** | Her oturum açılışında | Not yazmaz; maskeler, commit'ler, push'lar |
+| **Sen** | İstediğinde | Her yere; elle yazdığın metni hiçbir model silmez |
 
-Arka plan modelleri `claude -p --safe-mode` ile çalışır: kendi aboneliğini kullanırlar, CLAUDE.md, hook veya skill yüklemezler. Haiku'nun hiç aracı yoktur, sadece JSON döndürür ve dosyaları script yazar. Sonnet'in sadece `Read/Write/Edit/Glob/Grep` araçları vardır, komut çalıştıramaz.
+Arka plan modelleri `claude -p --safe-mode` ile çalışır; CLAUDE.md, hook veya skill yüklemez. Haiku'nun aracı yok, sadece JSON döndürür. Sonnet sadece dosya okuyup yazabilir, komut çalıştıramaz.
 
-**Alıntı doğrulaması.** Derleme iki aşamalıdır. Önce araçsız bir Sonnet günlük girişlerinden kalıcı iddiaları çıkarır ve her birine girişlerden birebir alıntı ekler. Script her alıntıyı girişlerde arar; birebir geçmeyen alıntının iddiası atılır (`.claude/durum/reddedilen.md`). İkinci Sonnet sadece doğrulanmış iddiaları görür. Bu, uydurmayı kod seviyesinde keser.
+**Alıntı doğrulaması.** İlk Sonnet günlüklerden iddiaları birebir alıntılarıyla çıkarır. Script her alıntıyı kaynağında arar, bulamadığını atar. İkinci Sonnet yalnızca doğrulanmış iddiaları görür. Böylece uydurma bilgi sayfalara giremez.
 
 ---
 
@@ -116,67 +112,67 @@ Arka plan modelleri `claude -p --safe-mode` ile çalışır: kendi aboneliğini 
 
 | Katman | Soru | Dosyalar |
 | --- | --- | --- |
-| **Çalışan hafıza** | "Şu an neredeyiz, nasıl davranmalıyım?" | `80-Hafiza/Kurallar.md` (bağlayıcı talimatlar), `Son-Oturum.md`, `Konular.md` (çok oturumlu açık işler), `Cekirdek.md` (sen kimsin) |
-| **Olay hafızası** | "Ne zaman ne konuştuk?" | `50-Gunler/` |
-| **Bilgi hafızası** | "Bu konuda ne biliyoruz?" | `20-Bilgi/`, `30-Kaynaklar/`, `10-Projeler/` |
-| **Katalog** | "Hangi sayfa var, ne değişti?" | `20-Bilgi/index.md`, `20-Bilgi/log.md` |
+| **Çalışan** | Şu an neredeyiz? | `80-Hafiza/` (Kurallar, Son-Oturum, Konular, Cekirdek) |
+| **Olay** | Ne zaman ne konuştuk? | `50-Gunler/` |
+| **Bilgi** | Bu konuda ne biliyoruz? | `20-Bilgi/`, `30-Kaynaklar/`, `10-Projeler/` |
+| **Katalog** | Hangi sayfa var? | `20-Bilgi/index.md`, `20-Bilgi/log.md` |
 
-Oturum başında bağlama sadece özetler girer (en fazla 16.000 karakter). Ayrıntı gerektiğinde Claude index'ten ilgili sayfayı açar veya vault'u arar.
+Oturum başında yalnızca özetler yüklenir (en fazla 16.000 karakter). Gerisini Claude gerektiğinde açar.
 
 ---
 
 ## Klasör haritası
 
 ```
-├── 00-Gelen/          Ham, hızlı notlar ("şunu not al")
-├── 10-Projeler/       Birden fazla oturuma yayılan projeler
-├── 20-Bilgi/          Kalıcı bilgi sayfaları + index.md + log.md
-├── 30-Kaynaklar/      Araçlar, kişiler, siteler, repolar
-├── 50-Gunler/         Günlük oturum logları (YYYY-MM-DD.md)
+├── 00-Gelen/          Hızlı notlar
+├── 10-Projeler/       Projeler
+├── 20-Bilgi/          Bilgi sayfaları, index.md, log.md
+├── 30-Kaynaklar/      Araçlar, kişiler, siteler
+├── 50-Gunler/         Günlük loglar
 ├── 80-Hafiza/         Kurallar, Son-Oturum, Konular, Cekirdek
-├── 90-Arsiv/          Biten veya rafa kalkan şeyler
-├── Sablonlar/         Not ve günlük şablonları
+├── 90-Arsiv/          Bitenler
+├── Sablonlar/         Şablonlar
 ├── Pano.md            Obsidian ana sayfası
-├── CLAUDE.md          Ana modelin çalışma talimatları
-├── kurulum.py         Tek seferlik kurulum
+├── CLAUDE.md          Ana modelin talimatları
+├── kurulum.py         Kurulum
 └── .claude/
     ├── settings.json      Hook tanımları
-    ├── ayarlar.json       Adın ve yedek ayarı (kurulum yazar)
+    ├── ayarlar.json       Kullanıcı ayarları (kurulum yazar)
     ├── hooks/
-    │   ├── beyin.py       Hızlı hook'lar: bağlam enjeksiyonu, worker başlatma
-    │   ├── arka_plan.py   Ağır iş: özet, alıntı doğrulamalı derleme, maskeleme, git
-    │   └── proje.py       Global hook'lar: başka projelerde hatırlatma ve oturum sigortası
+    │   ├── beyin.py       Bağlam yükleme, worker başlatma
+    │   ├── arka_plan.py   Özet, derleme, maskeleme, git
+    │   └── proje.py       Başka projeler için global hook'lar
     ├── skills/
-    │   ├── beyin-bakim/   Sağlık kontrolü: kopya/yetim sayfa, kırık link, şişen dosya
+    │   ├── beyin-bakim/   Sağlık kontrolü
     │   └── gecmis-aktar/  ChatGPT / Claude / Gemini geçmişini içe aktarma
-    └── durum/             Çalışma durumu (git'e girmez): kuyruk, log, kilit, uyarılar
+    └── durum/             Çalışma durumu (git'e girmez)
 ```
 
 ---
 
 ## Kullanım
 
-| Komut / ifade | Ne yapar |
+| Ne dersin | Ne olur |
 | --- | --- |
-| `claude` (bu klasörde) | Hafızası yüklü oturum başlatır |
-| "not al", "kaydet", "şunu unutma" | Anında ilgili sayfaya yazar |
-| "böyle yapma", "daha kısa yaz" | `Kurallar.md`'ye kural olarak eklenir, hemen geçerli olur |
-| "bunu kaydetme" | O konu hiçbir yere yazılmaz |
-| "derle", "notları işle" | Kuyruğu hemen kalıcı sayfalara işler |
-| "bakım yap", "beyni kontrol et" | `beyin-bakim` skill'i |
-| "geçmişimi aktar" | ChatGPT / Claude / Gemini dışa aktarımını içe alır |
+| `claude` (bu klasörde) | Hafızası yüklü oturum başlar |
+| "not al", "kaydet" | Hemen ilgili sayfaya yazılır |
+| "böyle yapma", "daha kısa yaz" | `Kurallar.md`'ye eklenir, hemen geçerli olur |
+| "bunu kaydetme" | Hiçbir yere yazılmaz |
+| "derle" | Kuyruk hemen işlenir |
+| "bakım yap" | `beyin-bakim` çalışır |
+| "geçmişimi aktar" | Eski sohbet geçmişi içe alınır |
 
-Çalışma günlüğü: `.claude/durum/arka_plan.log`. Arka planda bir şey başarısız olursa sonraki oturum başında Claude söyler.
+Log: `.claude/durum/arka_plan.log`. Arka planda bir hata olursa Claude sonraki oturumda söyler.
 
 ---
 
 ## Güvenlik
 
-**Gizli bilgi maskeleme.** "Sır yazma" kuralı sadece modellerin dikkatine bırakılmaz: transkript Haiku'ya gitmeden önce ve her commit'ten önce değişen notlar taranır; API anahtarları, token'lar, `şifre:` / `password=` kalıpları, özel anahtarlar, TR IBAN, kart numarası ve TC kimlik no `[GİZLİ: tür]` ile değiştirilir.
+**Maskeleme.** Transkript Haiku'ya gitmeden ve her commit'ten önce taranır. API anahtarları, token'lar, şifreler, IBAN, kart ve TC kimlik numaraları `[GİZLİ: tür]` ile değiştirilir.
 
-**Yedek.** Klasörün zaten bir git remote'u varsa kurulum otomatik push'u sorar ve varsayılan cevap *hayır*dır. Remote yoksa notlar sadece yerelde commit'lenir; sonradan kendin bir remote eklersen oraya push'lanır. Her durumda remote'un **private** olduğundan emin ol. Ayarı sonradan `.claude/ayarlar.json` içindeki `otomatik_push` ile değiştirebilirsin.
+**Yedek.** Klasörde zaten bir remote varsa kurulum otomatik push'u sorar (varsayılan: hayır). Remote yoksa notlar yerelde commit'lenir; sonradan eklediğin remote'a push'lanır. Remote'un **private** olduğundan emin ol. Ayar: `.claude/ayarlar.json` içinde `otomatik_push`.
 
-**Hata toleransı.** İki worker dosya kilidiyle sıraya girer; yarıda kesilen derleme sonraki çalıştırmada kuyruğa geri alınır; hook hataları oturumu asla bozmaz; her derlemeden önce ve sonra commit olduğu için bozulan not geri alınabilir.
+**Hata toleransı.** Worker'lar kilitle sıraya girer, yarıda kalan derleme kuyruğa geri döner, hook hataları oturumu bozmaz. Her derlemeden önce ve sonra commit atıldığı için bozulan not geri alınabilir.
 
 ---
 
@@ -184,19 +180,19 @@ Oturum başında bağlama sadece özetler girer (en fazla 16.000 karakter). Ayr�
 
 Kurulumda global hook'ları seçersen:
 
-- `~/.claude/CLAUDE.md`'ye bir **köprü** eklenir: başka klasörde çalışan Claude gerektiğinde `Cekirdek.md` ve `Kurallar.md`'yi okur, kalıcı proje kararlarını `10-Projeler/<proje>.md` sayfasına yazar.
+- `~/.claude/CLAUDE.md`'ye bir köprü eklenir. Başka klasördeki Claude gerektiğinde `Cekirdek.md` ve `Kurallar.md`'yi okur, proje kararlarını `10-Projeler/<proje>.md`'ye yazar.
 - `~/.claude/settings.json`'a dört hook eklenir (`proje.py`):
-  - **hatırlatma:** mesajındaki kelimeler bilgi indeksindeki sayfa adlarıyla eşleşirse Claude'a o notların yolu verilir (LLM çağrısı yok);
-  - **oturum sigortası:** projede bir `*save-session` komutu varsa ve oturumu kaydetmeden kapatırsan Haiku bir devir dosyası yazar.
+  - **hatırlatma:** mesajın bir bilgi sayfasıyla eşleşirse Claude'a o notun yolu verilir;
+  - **oturum sigortası:** projede `*save-session` komutu varsa ve kaydetmeden kapatırsan Haiku bir devir dosyası yazar.
 
-> Global hook'lar bu klasördeki `proje.py`'yi mutlak yolla çağırır. Vault'u taşırsan `kurulum.py`'yi yeni yerde tekrar çalıştır ve `~/.claude/settings.json`'daki eski dört satırı sil.
+> Vault'u taşırsan `kurulum.py`'yi yeni yerde tekrar çalıştır ve `~/.claude/settings.json`'daki eski dört satırı sil.
 
 ---
 
 ## Tasarım kararları
 
-- **Veritabanı yerine Markdown.** Hafıza, okuyup düzeltebildiğin ve git ile geçmişi tutulan dosyalardır.
-- **İki modelli iş bölümü.** Sık ve basit iş (özet) ucuz modelde, seyrek ve düşünce isteyen iş (bilgiyi yerine oturtma, çelişki yakalama) güçlü modelde.
-- **Sohbet not tutmakla meşgul olmaz.** Rutin kayıt oturum bittikten sonra yapılır.
-- **Konu başına tek sayfa.** Yeni bilgi mevcut sayfaya işlenir; çelişkiler sessizce silinmez, işaretlenir.
-- **Her şey Türkçe.** Notlar, dosya adları, loglar. Teknik terimler ve kod olduğu gibi kalır.
+- **Markdown, veritabanı değil.** Hafızayı okuyup düzeltebilirsin, geçmişi git tutar.
+- **İki model.** Basit iş (özet) ucuz modelde, düşünce isteyen iş (derleme) güçlü modelde.
+- **Sohbet not tutmakla uğraşmaz.** Kayıt oturumdan sonra yapılır.
+- **Konu başına tek sayfa.** Yeni bilgi mevcut sayfaya eklenir, çelişkiler işaretlenir.
+- **Her şey Türkçe.** Teknik terimler ve kod olduğu gibi kalır.
