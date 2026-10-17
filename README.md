@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.svg" alt="Mined: sohbetlerini kalıcı bilgiye işleyen Türkçe ikinci beyin" width="100%">
+  <img src="assets/banner.svg" alt="Mined: Ajan tabanlı yapay zekâ ekosistemi için hafıza sistemi." width="100%">
 </p>
 
 # Mined
